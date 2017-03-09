@@ -1,0 +1,41 @@
+- name: "Carregar variáveis"
+  include_vars:
+    dir: 'vars'
+    extensions: ['yml']
+
+- name: "Instalando Pré-requisito para Varnish no Centos"
+  yum: 
+    name: epel-release 
+    state: latest 
+    update_cache: yes
+  when: ansible_os_family ==  "RedHat"
+
+- name: "Adicionando Repositório RPM para Centos7+"
+  yum_repository: 
+    name: varnish
+    state: present 
+    baseurl: {{ CENTOS_7_URL }}
+  when: ansible_os_family ==  "RedHat" and ansible_distribution_version >= '7'
+
+- name: "Adicionando Repositório RPM para Centos7+"
+  yum_repository: 
+    name: varnish
+    state: present 
+    baseurl: {{ CENTOS_6_URL }}
+  when: ansible_os_family ==  "RedHat" and ansible_distribution_version <= '6'
+
+- name: "Instalação do Varnish no Ubuntu"
+  apt: 
+    name: varnish 
+    state: latest 
+    update_cache: yes 
+    install_recommends: yes
+  when: ansible_os_family ==  "Debian"
+
+- name: "Instalação do Varnish no Centos7"
+  yum: 
+    name: varnish 
+    state: latest 
+    update_cache: yes
+  when: ansible_os_family ==  "RedHat"
+

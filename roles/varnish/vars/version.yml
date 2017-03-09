@@ -1,0 +1,2 @@
+- CENTOS_6_URL : 'https://repo.varnish-cache.org/redhat/varnish-4.1.el6.rpm'
+- CENTOS_7_URL : 'https://repo.varnish-cache.org/redhat/varnish-4.1.el7.rpm'
