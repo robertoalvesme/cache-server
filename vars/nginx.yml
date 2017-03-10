@@ -1,1 +1,1 @@
-- hosts : [{ 'name' : 'dev.portal.com.br' , 'name' : 'homolog.portal.com.br' }]
+- host_list : [{ 'name' : 'portal.com.br' } , { 'name' : 'homolog.com.br' }]

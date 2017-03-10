@@ -11,16 +11,16 @@
     name: nginx
     state: stopped
 
-- name: "Criar grupo Pushlisher"
-  group: 
-    name: publisher
-    state: present
-
-- name: "Criar usuário Pushlisher"
-  user:
-    name: publisher
-    group: publisher
-    comment: "Usuário Apache"
+# - name: "Criar grupo Pushlisher"
+#   group: 
+#     name: publisher
+#     state: present
+# 
+# - name: "Criar usuário Pushlisher"
+#   user:
+#     name: publisher
+#     group: publisher
+#     comment: "Usuário Pus"
 
 - name: "Criar pasta www"
   file: 
@@ -29,11 +29,11 @@
     mode: u=rwX,g=rX,o=rX
     recurse: true
 
-- name: "Liberar permissão de leitura na pasta www"
-  file: 
-    path: /var/www/
-    mode: u=rwX,g=rX,o=rX
-    recurse: true
+# - name: "Liberar permissão de leitura na pasta www"
+#   file: 
+#     path: /var/www/
+#     mode: u=rwX,g=rX,o=rX
+#     recurse: true
 
 - name: "Criar diretório de Hosts"
   file: 
@@ -41,7 +41,8 @@
     state: directory
     owner: publisher
     group: publisher
-  with_items: "{{ hosts }}"
+  with_items: 
+    - "{{ host_list }}"
 
 - name: "Criando um arquivo inicial"
   template: 
@@ -49,14 +50,16 @@
     dest: /var/www/{{ item.name }}/html/index.html
     owner: publisher
     group: publisher
-  with_items: "{{ hosts }}"
+  with_items: 
+    - "{{ host_list }}"
 
 # scp vagrant@192.168.155.20:/etc/nginx/sites-available/default ./roles/nginx/templates/
 - name: "Configurando sites"
   template:
     src: default
     dest: /etc/nginx/sites-available/{{ item.name }}
-  with_items: "{{ hosts }}"
+  with_items: 
+    - "{{ host_list }}"
 
 - name: "Habilitar todos os sites em Debian"
   file:
@@ -64,7 +67,7 @@
     dest: /etc/nginx/sites-enabled/{{ item.name }}
     state: link
     force: yes
-  with_items: "{{ hosts }}"
+  with_items: "{{ host_list }}"
   when: ansible_os_family ==  "Debian"
 
 #scp vagrant@192.168.155.20:/etc/nginx/nginx.conf ./roles/nginx/templates/
