@@ -45,8 +45,8 @@
     state: stopped
 
 # Copiar arquivos de configuração da maquina configurada
-# scp vagrant@192.168.155.10:/etc/default/varnish ./roles/varnish/template/
-# scp vagrant@192.168.155.10:/lib/systemd/system/varnish.service ./roles/varnish/template/
+# scp vagrant@192.168.155.10:/etc/default/varnish ./roles/varnish/templates/
+# scp vagrant@192.168.155.10:/lib/systemd/system/varnish.service ./roles/varnish/templates/
 - name: "Configurando Varnish"
   template: 
     src: "{{ item.name }}"

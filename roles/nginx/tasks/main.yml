@@ -1,7 +1,80 @@
 - name: Instalar NGinx
   apt: 
     name: nginx 
-    state: latest 
-    update_cache: yes 
+    #state: latest 
+    update_cache: false
     install_recommends: yes
   when: ansible_os_family ==  "Debian"
+
+- name: "Parar NGinx"
+  service:
+    name: nginx
+    state: stopped
+
+- name: "Criar grupo Pushlisher"
+  group: 
+    name: publisher
+    state: present
+
+- name: "Criar usuário Pushlisher"
+  user:
+    name: publisher
+    group: publisher
+    comment: "Usuário Apache"
+
+- name: "Criar pasta www"
+  file: 
+    path: /var/www/
+    state: directory
+    mode: u=rwX,g=rX,o=rX
+    recurse: true
+
+- name: "Liberar permissão de leitura na pasta www"
+  file: 
+    path: /var/www/
+    mode: u=rwX,g=rX,o=rX
+    recurse: true
+
+- name: "Criar diretório de Hosts"
+  file: 
+    path: /var/www/{{ item.name }}/html 
+    state: directory
+    owner: publisher
+    group: publisher
+  with_items: "{{ hosts }}"
+
+- name: "Criando um arquivo inicial"
+  template: 
+    src: index.html 
+    dest: /var/www/{{ item.name }}/html/index.html
+    owner: publisher
+    group: publisher
+  with_items: "{{ hosts }}"
+
+# scp vagrant@192.168.155.20:/etc/nginx/sites-available/default ./roles/nginx/templates/
+- name: "Configurando sites"
+  template:
+    src: default
+    dest: /etc/nginx/sites-available/{{ item.name }}
+  with_items: "{{ hosts }}"
+
+- name: "Habilitar todos os sites em Debian"
+  file:
+    src: /etc/nginx/sites-available/{{ item.name }}
+    dest: /etc/nginx/sites-enabled/{{ item.name }}
+    state: link
+    force: yes
+  with_items: "{{ hosts }}"
+  when: ansible_os_family ==  "Debian"
+
+#scp vagrant@192.168.155.20:/etc/nginx/nginx.conf ./roles/nginx/templates/
+- name: "Adicionando memória aos site list"
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  sudo: yes
+
+- name: "Inicializar NGinx"
+  service:
+    name: nginx
+    state: started

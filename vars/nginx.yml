@@ -1,0 +1,1 @@
+- hosts : [{ 'name' : 'dev.portal.com.br' , 'name' : 'homolog.portal.com.br' }]
