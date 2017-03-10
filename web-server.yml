@@ -1,0 +1,7 @@
+- hosts: all
+  sudo: True
+  user: vagrant
+  vars_files:
+    - vars/nginx.yml
+  roles:
+    - nginx

@@ -1,7 +1,7 @@
-- name: "Carregar variáveis"
-  include_vars:
-    dir: 'vars'
-    extensions: ['yml']
+# - name: "Carregar variáveis"
+#   include_vars:
+#     dir: 'vars'
+#     extensions: ['yml']
 
 - name: "Instalando Pré-requisito para Varnish no Centos"
   yum: 
@@ -10,19 +10,19 @@
     update_cache: yes
   when: ansible_os_family ==  "RedHat"
 
-- name: "Adicionando Repositório RPM para Centos7+"
-  yum_repository: 
-    name: varnish
-    state: present 
-    baseurl: {{ CENTOS_7_URL }}
-  when: ansible_os_family ==  "RedHat" and ansible_distribution_version >= '7'
+# - name: "Adicionando Repositório RPM para Centos7"
+#   yum_repository: 
+#     name: varnish
+#     state: present 
+#     baseurl: "{{ CENTOS_7_URL }}"
+#   when: ansible_os_family ==  "RedHat" and ansible_distribution_version >= '7'
 
-- name: "Adicionando Repositório RPM para Centos7+"
-  yum_repository: 
-    name: varnish
-    state: present 
-    baseurl: {{ CENTOS_6_URL }}
-  when: ansible_os_family ==  "RedHat" and ansible_distribution_version <= '6'
+# - name: "Adicionando Repositório RPM para Centos6"
+#   yum_repository:
+#     name: varnish
+#     state: present 
+#     baseurl: "{{ CENTOS_6_URL }}"
+#   when: ansible_os_family ==  "RedHat" and ansible_distribution_version <= '6'
 
 - name: "Instalação do Varnish no Ubuntu"
   apt: 
@@ -39,3 +39,23 @@
     update_cache: yes
   when: ansible_os_family ==  "RedHat"
 
+- name: "Parar Varnish"
+  service:
+    name: varnish
+    state: stopped
+
+# Copiar arquivos de configuração da maquina configurada
+# scp vagrant@192.168.155.10:/etc/default/varnish ./roles/varnish/template/
+# scp vagrant@192.168.155.10:/lib/systemd/system/varnish.service ./roles/varnish/template/
+- name: "Configurando Varnish"
+  template: 
+    src: {{ item.name }}
+    dest: {{ item.destine }}
+    owner: root
+    group: root
+  with_items: [{ name: 'varnish' , destine : '/etc/default/varnish' },{ name : 'varnish.service' , destine : '/lib/systemd/system/varnish.service' },{ name : 'default.vcl' , destine : '/etc/varnish/default.vcl' }]
+
+- name: "Inicializar Varnish"
+  service:
+    name: varnish
+    state: started

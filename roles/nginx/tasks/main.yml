@@ -1,0 +1,7 @@
+- name: Instalar NGinx
+  apt: 
+    name: nginx 
+    state: latest 
+    update_cache: yes 
+    install_recommends: yes
+  when: ansible_os_family ==  "Debian"
