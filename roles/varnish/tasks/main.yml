@@ -27,8 +27,8 @@
 - name: "Instalação do Varnish no Ubuntu"
   apt: 
     name: varnish 
-    state: latest 
-    update_cache: yes 
+    # state: latest 
+    update_cache: no 
     install_recommends: yes
   when: ansible_os_family ==  "Debian"
 
@@ -49,8 +49,8 @@
 # scp vagrant@192.168.155.10:/lib/systemd/system/varnish.service ./roles/varnish/template/
 - name: "Configurando Varnish"
   template: 
-    src: {{ item.name }}
-    dest: {{ item.destine }}
+    src: "{{ item.name }}"
+    dest: "{{ item.destine }}"
     owner: root
     group: root
   with_items: [{ name: 'varnish' , destine : '/etc/default/varnish' },{ name : 'varnish.service' , destine : '/lib/systemd/system/varnish.service' },{ name : 'default.vcl' , destine : '/etc/varnish/default.vcl' }]
