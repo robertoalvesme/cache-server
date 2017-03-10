@@ -3,17 +3,6 @@ backend default {
     .port = "{{ varnish_backend_port }}";
 }
 
-# Excluir do cache
-if (req.method == "POST" || ( req.http.host == "example.com" && req.url ~ "^/admin") || req.http.Cookie == "logged_in") {
-    return (pass);
-}
-
-
-
-
-
-
-
 
 # 
 # Below is a commented-out copy of the default VCL logic.  If you
