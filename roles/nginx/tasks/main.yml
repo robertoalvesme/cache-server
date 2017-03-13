@@ -11,16 +11,16 @@
     name: nginx
     state: stopped
 
-# - name: "Criar grupo Pushlisher"
-#   group: 
-#     name: publisher
-#     state: present
-# 
-# - name: "Criar usuário Pushlisher"
-#   user:
-#     name: publisher
-#     group: publisher
-#     comment: "Usuário Pus"
+- name: "Criar grupo Pushlisher"
+  group: 
+    name: publisher
+    state: present
+
+- name: "Criar usuário Pushlisher"
+  user:
+    name: publisher
+    group: publisher
+    comment: "Usuário Pus"
 
 - name: "Criar pasta www"
   file: 
@@ -39,8 +39,8 @@
   file: 
     path: /var/www/{{ item.name }}/html 
     state: directory
-    owner: publisher
-    group: publisher
+    #owner: publisher
+    #group: publisher
   with_items: 
     - "{{ host_list }}"
 
@@ -48,8 +48,8 @@
   template: 
     src: index.html 
     dest: /var/www/{{ item.name }}/html/index.html
-    owner: publisher
-    group: publisher
+    #owner: publisher
+    #group: publisher
   with_items: 
     - "{{ host_list }}"
 
