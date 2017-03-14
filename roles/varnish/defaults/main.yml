@@ -1,4 +1,4 @@
 varnish_cache_size: "1G"
 varnish_port_listener: 80
-varnish_backend_ip: 192.168.155.20
+varnish_backend_host: 192.168.155.20
 varnish_backend_port: 80

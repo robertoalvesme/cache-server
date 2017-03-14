@@ -2,6 +2,6 @@
   sudo: True
   user: vagrant
   vars_files:
-    - vars/nginx.yml
+    - vars/hosts.yml
   roles:
     - nginx

@@ -9,15 +9,7 @@ server {
 	server_name {{ item.name }} www.{{ item.name }} dev.{{ item.name }};
 
 	location / {
-		try_files $uri $uri/ =404;
-	}
-
-	location /doc/ {
-		alias /usr/share/doc/;
-		autoindex on;
-		allow 127.0.0.1;
-		allow ::1;
-		deny all;
+       try_files $uri $uri/ =404;
     }
 
 }

@@ -44,6 +44,11 @@
     name: varnish
     state: stopped
 
+
+#Copiar arquivo de configuração da maquina redhat /etc/sysconfig/varnish
+
+
+
 # Copiar arquivos de configuração da maquina configurada
 # scp vagrant@192.168.155.10:/etc/default/varnish ./roles/varnish/templates/
 # scp vagrant@192.168.155.10:/lib/systemd/system/varnish.service ./roles/varnish/templates/
@@ -54,6 +59,8 @@
     owner: root
     group: root
   with_items: [{ name: 'varnish' , destine : '/etc/default/varnish' },{ name : 'varnish.service' , destine : '/lib/systemd/system/varnish.service' },{ name : 'default.vcl' , destine : '/etc/varnish/default.vcl' }]
+  when: ansible_os_family ==  "Debian"
+
 
 - name: "Inicializar Varnish"
   service:
