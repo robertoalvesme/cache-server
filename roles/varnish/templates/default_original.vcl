@@ -1,9 +1,13 @@
+# This is a basic VCL configuration file for varnish.  See the vcl(7)
+# man page for details on VCL syntax and semantics.
+# 
+# Default backend definition.  Set this to point to your content
+# server.
+# 
 backend default {
-    .host = "{{ varnish_backend_ip }}";
-    .port = "{{ varnish_backend_port }}";
+    .host = "127.0.0.1";
+    .port = "8080";
 }
-
-
 # 
 # Below is a commented-out copy of the default VCL logic.  If you
 # redefine any of these subroutines, the built-in logic will be
